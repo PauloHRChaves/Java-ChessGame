@@ -1,0 +1,23 @@
+/* Estilo do fundo do jogo */
+.game-background {
+    -fx-background-color: #141414;
+}
+
+.tabuleiro {
+    -fx-background-color: #b58863; /*#34495e#b58863;*/
+    -fx-border-color: rgb(255, 255, 255);
+    -fx-border-width: 2;
+    -fx-padding:5;
+    -fx-grid-lines-visible: false;
+    -fx-alignment: center;
+}
+
+.casa-par, .casa-ímpar {
+    -fx-min-width: 50; 
+    -fx-min-height: 50;
+    -fx-pref-width: 100;
+    -fx-pref-height: 100;
+}
+
+.casa-par { -fx-background-color: #f0d9b5; }
+.casa-ímpar { -fx-background-color: #b58863; }

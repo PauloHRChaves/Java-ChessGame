@@ -1,0 +1,34 @@
+noREADME.md
+.github/
+
+# Pastas de build do Maven
+target/
+.mvn/wrapper/maven-wrapper.jar
+
+# --- Configurações do IntelliJ IDEA ---
+.idea/
+*.iml
+*.iws
+out/
+
+# --- Configurações do Eclipse ---
+.metadata/
+bin/
+.tmp/
+.polyglot.build.properties
+.settings/
+.classpath
+.project
+.factorypath
+
+# --- Configurações do VS Code ---
+.vscode/
+.factorypath
+
+# Pastas de sistema operacional
+.DS_Store
+Thumbs.db
+
+# Logs e arquivos temporários
+*.log
+*.tmp
