@@ -23,38 +23,33 @@ public class App extends Application {
         applyStyles(scene, "menu");
         
         // Tamanho minimo da Janela
-        stage.setMinWidth(800);
-        stage.setMinHeight(800);
+        stage.setMinWidth(882);
+        stage.setMinHeight(904);
         
         stage.setTitle("Java Chess");
         stage.setScene(scene);
         stage.show();
     }
 
-    // Sistema de Navegação Dinâmica via Gerenciador de Janela Única (Single Window Dynamic Navigation)
-    public static void setRoot(String fxml, String css) throws IOException {
-        scene.setRoot(loadFXML(fxml));
-        applyStyles(scene, css);
+    // Verificar FXML
+    private static Parent loadFXML(String fxml) throws IOException {
+        String path = "/pages/" + fxml + ".fxml";
+        URL url = App.class.getResource(path);
+        return new FXMLLoader(url).load();
     }
-
+    
     // Verificar CSS
     private static void applyStyles(Scene scene, String css) throws IOException {
         scene.getStylesheets().clear();
         String path = "/styles/" + css + ".css";
         URL cssUrl = App.class.getResource(path);
-        
-        if (cssUrl == null) {
-            throw new IOException("Arquivo CSS não encontrado: " + path);
-        }
         scene.getStylesheets().add(cssUrl.toExternalForm());
     }
 
-    // Verificar FXML
-    private static Parent loadFXML(String fxml) throws IOException {
-        String path = "/pages/" + fxml + ".fxml";
-        URL url = App.class.getResource(path);
-        if (url == null) throw new IOException("Arquivo FXML não encontrado: " + path);
-        return new FXMLLoader(url).load();
+    // Sistema de Navegação Dinâmica via Gerenciador de Janela Única (Single Window Dynamic Navigation)
+    public static void setRoot(String fxml, String css) throws IOException {
+        scene.setRoot(loadFXML(fxml));
+        applyStyles(scene, css);
     }
 
     public static void main(String[] args) {

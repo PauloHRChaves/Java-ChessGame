@@ -3,6 +3,7 @@
 Jogo de xadrez desenvolvido em Java aplicando Padrões de Projeto do GoF (Gang of Four).
 
 Tecnologias usadas:
+
 - Java OpenJDK 17
 - JavaFX 17.0.2
 - Maven 3.9.12 (via Maven Wrapper – mvnw)
@@ -40,21 +41,20 @@ O projeto foi desenvolvido seguindo padrões de arquitetura e ferramentas que vi
 
 - Interface: Utilização de FXML para a estruturação da interface e CSS para a estilização visual, permitindo um design desacoplado do código Java.
 
-
 <br>
 <h2>Padrões de Projetos almejados:</h2>
 
 Criacional:
-- Singleton: classe central que controla o fluxo, o cérebro (GameEngine).
+- Singleton: classe central que controla o fluxo da partida (Orchestrator).
 - Factory: criar peças sem expor a lógica de instanciação (PiecesFactory).
 
 <br>
 
 Comportamental:
 - <u>Memento: historico de partida ou jogadas.</u>
-- Observer:  atualizar a interface quando o estado do jogo muda.
-- Strategy: definir a lógica de movimento de cada peça de forma independente.
-- State: alterar o comportamento do jogo conforme o estado (ex: turno, xeque, xeque-mate).
+- Observer: atualizar a interface quando o estado do jogo muda (GameObserver).
+- Strategy: definir a lógica de movimento de cada peça de forma independente (MovementStrategy).
+- State: alterar o comportamento do jogo conforme o estado, ex: turno, xeque, xeque-mate.
 
 <br>
 
@@ -77,23 +77,30 @@ Estrutural:
 <hr>
 <h3>MenuController.java:</h3>
 •	O método <code>onStartGameClicked()</code> é disparado.<br>
-•	Ação: Chama <code>GameEngine.getInstance().startGame()</code>.<br>
+•	Ação: Chama <code>Orchestrator.getInstance().startGame()</code>.<br>
 
 <hr>
-<h3>GameEngine.java:</h3>
+<h3>Orchestrator.java:</h3>
 •	<code>getInstance()</code>: Verifica se o motor já existe (se não, cria agora).<br>
-•	Executa o construtor do GameEngine e parte para toda criação lógica do tabuleiro em <code>this.board = new Board();</code><br>
+•	Executa o construtor do Orchestrator e parte para toda criação lógica do tabuleiro em <code>this.board = new Board();</code><br>
 •	Realiza toda lógica criação do tabuleiro, criação e posicionamento das peças, mas sem nada visual.<br>
-•	Logo após toda a lógica chama o método <code>startGame()</code>: Comanda o App.java a trocar a tela para game_layout.fxml.<br>
+•	Instancia o "juiz" da partida em <code>this.referee = new MatchReferee();</code><br>
+•	Instancia a classe que vai cuidar dos squares selecionados<code>this.selectionManager = new SelectionManager();</code><br>
+•	Instancia a classe que vai lidar dos cliques no tabuleiro<code>this.clickHandler = new ClickHandler(board, referee, selectionManager, this);</code><br>
+•	Logo após chama o método <code>startGame()</code>: Comanda o App.java a trocar a tela para game_layout.fxml.<br>
 
 <hr>
 <h3>game_layout.fxml:</h3>
 •	A nova tela é carregada.<br>
-•	O JavaFX identifica o fx:controller="GameViewController".
+•	O JavaFX identifica o fx:controller="GameController".
 
 <hr>
-<h3>GameViewController.java:</h3>
-•	O método <code>initialize()</code> roda automaticamente.<br>
-•	Cria o tabuleiro visual (ChessBoardView).<br>
-•	Chama <code>GameEngine.getInstance().setupGame()</code> para ligar a lógica das peças ao visual.<br>
+<h3>GameController.java:</h3>
+• O método <code>initialize()</code> é executado automaticamente pelo JavaFX ao carregar a tela.<br>
+• Obtém a instância única do <code>Orchestrator</code>, responsável por coordenar a lógica central da partida.<br>
+• Cria o componente visual do tabuleiro (<code>ChessBoardView</code>) e injeta nele o <code>SelectionManager</code>, responsável por armazenar a peça selecionada e seus movimentos possíveis.<br>
+• Adiciona o tabuleiro visual ao centro do layout principal da interface.<br>
+• Registra a <code>ChessBoardView</code> como observadora do jogo utilizando o padrão Observer.<br>
+• Sempre que o estado do tabuleiro mudar, a <code>ChessBoardView</code> será notificada automaticamente pelo <code>Orchestrator</code>.<br>
+• Realiza a atualização inicial da interface gráfica com base no estado atual do <code>Board</code>.<br>
 <hr>

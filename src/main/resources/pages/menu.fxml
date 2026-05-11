@@ -9,7 +9,7 @@
       fx:controller="com.pchess.controller.MenuController" styleClass="background">
       
     <children>
-        <Label text="Bem-vindo ao P-Chess" styleClass="titulo" />
+        <Label text="MENU" styleClass="titulo" />
         
         <!-- chama o metodo onStartGameClicked no MenuController -->
         <Button text="Jogar Partida" onAction="#onStartGameClicked" styleClass="btn-jogar" />

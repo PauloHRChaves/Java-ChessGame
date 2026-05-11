@@ -1,21 +1,45 @@
 package com.pchess.model.pieces;
 
+import java.util.List;
+
+import com.pchess.model.board.Board;
+import com.pchess.model.board.Position;
 import com.pchess.model.pieces.flyweight.ImageCache;
+import com.pchess.model.pieces.strategy.MovementStrategy;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-// Superclasse (Pai) abstrata que representa uma peça de xadrez genérica. 
 public abstract class Piece {
     private final String color;
     private final String type;
+    
+    private boolean moved = false;
+    protected MovementStrategy movementStrategy;
 
     public Piece(String color, String type) {
         this.color = color;
         this.type = type;
     }
 
-    // Classe ImagemView é um componente visual do JavaFX.
+    public String getType() { return type; }
+
+    public String getColor() { return color; }
+
+    public boolean hasMoved() { return moved; }
+
+    public void setMoved() { this.moved = true; }
+
+    public boolean canMove(Position from, Position to, Board board) {
+        // Agora 'from' e 'to' existem, pois foram declarados ali em cima no parâmetro
+        return movementStrategy.canMove(from, to, board, this);
+    }
+
+    public List<Position> getPossibleMoves(Position currentPos, Board board) {
+        // Agora 'currentPos' existe, pois foi declarado no parâmetro
+        return movementStrategy.getPossibleMoves(currentPos, board, this);
+    }
+
     public ImageView getView() {
         String path = "/images/" + color + "_" + type + ".png";
 

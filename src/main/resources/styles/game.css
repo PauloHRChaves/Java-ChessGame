@@ -1,23 +1,43 @@
-/* Estilo do fundo do jogo */
 .game-background {
     -fx-background-color: #141414;
 }
 
-.tabuleiro {
-    -fx-background-color: #b58863; /*#34495e#b58863;*/
-    -fx-border-color: rgb(255, 255, 255);
-    -fx-border-width: 2;
-    -fx-padding:5;
-    -fx-grid-lines-visible: false;
+.coord-label {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.board {
+    -fx-border-color: #b58863;
+    -fx-border-width: 4;
     -fx-alignment: center;
+    -fx-cursor: hand;
 }
 
-.casa-par, .casa-ímpar {
-    -fx-min-width: 50; 
-    -fx-min-height: 50;
-    -fx-pref-width: 100;
-    -fx-pref-height: 100;
+.square-even { 
+    -fx-cor-select: #73ff2271;
+    -fx-cor-base: #f0d9b5; 
+    -fx-background-color: -fx-cor-base; 
+}
+.square-odd { 
+    -fx-cor-select: #73ff2271; 
+    -fx-cor-base: #b58863; 
+    -fx-background-color: -fx-cor-base; 
 }
 
-.casa-par { -fx-background-color: #f0d9b5; }
-.casa-ímpar { -fx-background-color: #b58863; }
+.possible-move {
+    -fx-background-color: -fx-cor-base, #20202046;
+    -fx-background-insets: 0, 40;
+    -fx-background-radius: 0, 100;
+}
+
+.selectedSquare {
+    -fx-background-color: -fx-cor-base, -fx-cor-select;
+}
+
+.possible-capture {
+    -fx-background-color: -fx-cor-base, #0000005e, -fx-cor-base;
+    -fx-background-insets: 0, 5, 12;
+    -fx-background-radius: 0, 100, 100;
+}
