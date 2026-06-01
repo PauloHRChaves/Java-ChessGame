@@ -45,8 +45,8 @@ public class PeaoMovement implements MovementStrategy {
         return moves;
     }
 
-    private void checkCaptureDiagonal(List<Position> moves, int r, int c, Board board, Piece piece) {
-        Position diagPos = new Position(r, c);
+    private void checkCaptureDiagonal(List<Position> moves, int row, int col, Board board, Piece piece) {
+        Position diagPos = new Position(row, col);
         
         if (board.isValidPosition(diagPos)) {
             Piece target = board.getPiece(diagPos);

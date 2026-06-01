@@ -1,56 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 
-<!-- Chama o GameViewController para construir o tabuleiro -->
 <StackPane fx:id="rootContainer" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" 
-           fx:controller="com.pchess.controller.GameController"
+           fx:controller="com.pchess.controller.GameViewController"
            styleClass="game-background">
 
-    <BorderPane fx:id="mainLayout" maxWidth="-Infinity" maxHeight="-Infinity">
-        <top>
-            <HBox alignment="CENTER" prefHeight="30.0">
-                <padding><Insets left="34.0" right="34.0" /> </padding>
-                <Label text="A" styleClass="coord-label" maxWidth="Infinity" HBox.hgrow="ALWAYS" alignment="CENTER"/>
-                <Label text="B" styleClass="coord-label" maxWidth="Infinity" HBox.hgrow="ALWAYS" alignment="CENTER"/>
-                <Label text="C" styleClass="coord-label" maxWidth="Infinity" HBox.hgrow="ALWAYS" alignment="CENTER"/>
-                <Label text="D" styleClass="coord-label" maxWidth="Infinity" HBox.hgrow="ALWAYS" alignment="CENTER"/>
-                <Label text="E" styleClass="coord-label" maxWidth="Infinity" HBox.hgrow="ALWAYS" alignment="CENTER"/>
-                <Label text="F" styleClass="coord-label" maxWidth="Infinity" HBox.hgrow="ALWAYS" alignment="CENTER"/>
-                <Label text="G" styleClass="coord-label" maxWidth="Infinity" HBox.hgrow="ALWAYS" alignment="CENTER"/>
-                <Label text="H" styleClass="coord-label" maxWidth="Infinity" HBox.hgrow="ALWAYS" alignment="CENTER"/>
-            </HBox>
-        </top>
+    <BorderPane maxWidth="-Infinity" maxHeight="-Infinity">
+        <center>
+            <BorderPane fx:id="mainLayout" maxWidth="-Infinity" maxHeight="-Infinity">
+                <top>
+                    <HBox alignment="CENTER" prefHeight="30.0">
+                        <padding><Insets left="30.0" /></padding>
+                        <Label text="A" styleClass="coord-label" maxWidth="Infinity" HBox.hgrow="ALWAYS" alignment="CENTER"/>
+                        <Label text="B" styleClass="coord-label" maxWidth="Infinity" HBox.hgrow="ALWAYS" alignment="CENTER"/>
+                        <Label text="C" styleClass="coord-label" maxWidth="Infinity" HBox.hgrow="ALWAYS" alignment="CENTER"/>
+                        <Label text="D" styleClass="coord-label" maxWidth="Infinity" HBox.hgrow="ALWAYS" alignment="CENTER"/>
+                        <Label text="E" styleClass="coord-label" maxWidth="Infinity" HBox.hgrow="ALWAYS" alignment="CENTER"/>
+                        <Label text="F" styleClass="coord-label" maxWidth="Infinity" HBox.hgrow="ALWAYS" alignment="CENTER"/>
+                        <Label text="G" styleClass="coord-label" maxWidth="Infinity" HBox.hgrow="ALWAYS" alignment="CENTER"/>
+                        <Label text="H" styleClass="coord-label" maxWidth="Infinity" HBox.hgrow="ALWAYS" alignment="CENTER"/>
+                    </HBox>
+                </top>
 
-        <left>
-            <VBox alignment="CENTER" prefWidth="30.0">
-                <Label text="8" styleClass="coord-label" maxHeight="Infinity" VBox.vgrow="ALWAYS" alignment="CENTER"/>
-                <Label text="7" styleClass="coord-label" maxHeight="Infinity" VBox.vgrow="ALWAYS" alignment="CENTER"/>
-                <Label text="6" styleClass="coord-label" maxHeight="Infinity" VBox.vgrow="ALWAYS" alignment="CENTER"/>
-                <Label text="5" styleClass="coord-label" maxHeight="Infinity" VBox.vgrow="ALWAYS" alignment="CENTER"/>
-                <Label text="4" styleClass="coord-label" maxHeight="Infinity" VBox.vgrow="ALWAYS" alignment="CENTER"/>
-                <Label text="3" styleClass="coord-label" maxHeight="Infinity" VBox.vgrow="ALWAYS" alignment="CENTER"/>
-                <Label text="2" styleClass="coord-label" maxHeight="Infinity" VBox.vgrow="ALWAYS" alignment="CENTER"/>
-                <Label text="1" styleClass="coord-label" maxHeight="Infinity" VBox.vgrow="ALWAYS" alignment="CENTER"/>
-            </VBox>
-        </left>
+                <left>
+                    <VBox alignment="CENTER" prefWidth="30.0">
+                        <Label text="8" styleClass="coord-label" maxHeight="Infinity" VBox.vgrow="ALWAYS" alignment="CENTER"/>
+                        <Label text="7" styleClass="coord-label" maxHeight="Infinity" VBox.vgrow="ALWAYS" alignment="CENTER"/>
+                        <Label text="6" styleClass="coord-label" maxHeight="Infinity" VBox.vgrow="ALWAYS" alignment="CENTER"/>
+                        <Label text="5" styleClass="coord-label" maxHeight="Infinity" VBox.vgrow="ALWAYS" alignment="CENTER"/>
+                        <Label text="4" styleClass="coord-label" maxHeight="Infinity" VBox.vgrow="ALWAYS" alignment="CENTER"/>
+                        <Label text="3" styleClass="coord-label" maxHeight="Infinity" VBox.vgrow="ALWAYS" alignment="CENTER"/>
+                        <Label text="2" styleClass="coord-label" maxHeight="Infinity" VBox.vgrow="ALWAYS" alignment="CENTER"/>
+                        <Label text="1" styleClass="coord-label" maxHeight="Infinity" VBox.vgrow="ALWAYS" alignment="CENTER"/>
+                    </VBox>
+                </left>
+
+                <center>
+                    <StackPane fx:id="boardAnchor" style="-fx-background-color: rgba(0,0,0,0.1);">
+                    </StackPane>
+                </center>
+            </BorderPane>
+        </center>
 
         <right>
-            <VBox alignment="CENTER" prefWidth="30.0">
-                </VBox>
+            <VBox spacing="10" prefWidth="260" styleClass="sidebar">
+                <Label text="RODADA: " styleClass="turn"/> 
+                <HBox spacing="5" alignment="CENTER_LEFT">
+                    <Label fx:id="turnLabel" text="" styleClass="turn-label" />
+                    <Label fx:id="statusLabel" text="" styleClass="game-status-label" />
+                </HBox>
+                <Region VBox.vgrow="ALWAYS"/>
+                <HBox alignment="BOTTOM_LEFT">
+                    <Button text="RESTART" onAction="#handleRestart"  styleClass="btn-restart"/>
+                </HBox>
+            </VBox>
         </right>
-
-        <bottom>
-            <HBox alignment="CENTER" prefHeight="30.0">
-                <padding><Insets left="34.0" right="34.0" /> </padding>
-                <Label text="" styleClass="coord-label" maxWidth="Infinity" HBox.hgrow="ALWAYS" alignment="CENTER"/>
-            </HBox>
-        </bottom>
     </BorderPane>
-
 </StackPane>

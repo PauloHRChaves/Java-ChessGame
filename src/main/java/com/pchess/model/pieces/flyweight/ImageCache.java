@@ -5,14 +5,22 @@ import java.util.Map;
 
 import javafx.scene.image.Image;
 
+/**
+ * Gerenciador de cache estático para recursos visuais (Padrão de Projeto FLYWEIGHT).
+ * Otimiza o consumo de memória RAM e processamento de I/O, garantindo que cada imagem de peça (.png) seja carregada do disco apenas uma única vez durante o ciclo de vida do jogo.
+ */
 public class ImageCache {
-    // O cache é um mapa que associa o caminho da imagem (String) ao objeto Image correspondente.
+    // Mapa de persistência em memória que associa a URL textual do recurso à sua instância Image decodificada
     private static final Map<String, Image> cache = new HashMap<>();
 
+    /**
+     * Recupera uma imagem do cache ou a instancia caso seja a primeira requisição do recurso.
+     * Utiliza o método atômico 'computeIfAbsent' para garantir busca e inserção seguras.
+     * @return A instância compartilhada da classe Image do JavaFX.
+     */
     public static Image getImage(String path) {
+        // Se a chave (path) existir, retorna o valor imediatamente. 
+        // Caso contrário, executa a expressão lambda para criar, salvar no mapa e retornar a nova Image.
         return cache.computeIfAbsent(path, k -> new Image(path));
-        //? computeIfAbsent: Busca dentro do mapa para ver se já existe uma Image guardada com aquele path.
-        //? Se existir, ele ignora o resto da linha e entrega a imagem na hora.
-        //? Se não existir, executa a função lambda (k -> new Image(path)), que cria uma nova Image a partir do caminho, armazena essa nova Image no mapa associada ao caminho e retorna a nova Image.
     }
 }

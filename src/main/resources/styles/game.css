@@ -1,3 +1,19 @@
+.turn{
+    -fx-font-family: "Jersey 25";
+    -fx-text-fill: white;
+    -fx-font-size: 40px;
+}
+.turn-label{
+    -fx-font-family: "Jersey 25";
+    -fx-text-fill: rgb(255, 255, 255);
+    -fx-font-size: 30px;
+}
+.game-status-label {
+    -fx-font-family: "Jersey 25";
+    -fx-text-fill: rgb(255, 136, 136);
+    -fx-font-size: 30px;
+}
+
 .game-background {
     -fx-background-color: #141414;
 }
@@ -9,7 +25,7 @@
 }
 
 .board {
-    -fx-border-color: #b58863;
+    -fx-border-color: #9b7454;
     -fx-border-width: 4;
     -fx-alignment: center;
     -fx-cursor: hand;
@@ -40,4 +56,26 @@
     -fx-background-color: -fx-cor-base, #0000005e, -fx-cor-base;
     -fx-background-insets: 0, 5, 12;
     -fx-background-radius: 0, 100, 100;
+}
+
+.check-square {
+    -fx-background-color: #fe7878;
+}
+
+.checkmate-square {
+    -fx-background-color: #ff4141;
+}
+
+.sidebar {
+    -fx-padding: 40 20 20 20;
+}
+
+.btn-restart{
+    -fx-background-color: #27ae60;
+    -fx-font-family: "Jersey 25";
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-padding: 10px 30px;
+    -fx-background-radius: 10px;
+    -fx-cursor: hand;
 }
