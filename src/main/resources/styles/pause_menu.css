@@ -1,0 +1,47 @@
+/* Estilo para o fundo do menu de pausa */
+.pause-container {
+    -fx-background-color: rgba(0, 0, 0, 0.85);
+    -fx-background-radius: 10;
+    -fx-padding: 40;
+}
+
+/* Estilo para o título */
+.pause-title {
+    -fx-text-fill: white;
+    -fx-font-size: 40px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Jersey 25";
+}
+
+/* Estilo geral para os botões do menu */
+.pause-button {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-max-width: Infinity;
+    -fx-cursor: hand;
+    -fx-background-radius: 5;
+    -fx-padding: 10 20;
+}
+
+/* Cores específicas para cada botão */
+.btn-resume {
+    -fx-background-color: #4CAF50;
+}
+.btn-resume:hover {
+    -fx-background-color: #45a049;
+}
+
+.btn-menu-restart {
+    -fx-background-color: #2196F3;
+}
+.btn-menu-restart:hover {
+    -fx-background-color: #0b7dda;
+}
+
+.btn-exit {
+    -fx-background-color: #f44336;
+}
+.btn-exit:hover {
+    -fx-background-color: #da190b;
+}

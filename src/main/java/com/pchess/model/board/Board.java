@@ -126,11 +126,4 @@ public class Board {
         }
         return null;
     }
-
-    //! Debug
-    public String toCoords(Position position) {
-        char column = (char) (position.getCol() + 'A');
-        int line = 8 - position.getRow();
-        return "" + column + line;
-    }
 }

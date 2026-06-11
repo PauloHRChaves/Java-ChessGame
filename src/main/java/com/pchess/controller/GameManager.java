@@ -51,6 +51,13 @@ public class GameManager {
     }
 
     /**
+     * Altera a tela do aplicativo de volta para o menu principal.
+     */
+    public void showMainMenu() throws IOException {
+        App.setRoot("menu", "menu");
+    }
+
+    /**
      * Delega o processamento do clique de uma casa para o manipulador de cliques.
      */
     public void handleSquareClick(int row, int col) {
@@ -69,6 +76,13 @@ public class GameManager {
      */
     public GameSession getSession() {
         return session;
+    }
+
+    /**
+     * Delega o processamento da escolha de promoção do peão para o manipulador de cliques.
+     */
+    public void handlePromotionChoice(String tipoEscolhido) {
+        this.clickHandler.handlePromotionSelection(tipoEscolhido);
     }
 
     /**

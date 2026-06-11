@@ -12,6 +12,7 @@ public class GameSession {
     private Board board;
     private Referee referee;
     private SelectionManager selection;
+    private final java.util.List<String> moveHistory = new java.util.ArrayList<>();
 
     /**
      * Construtor da sessão.
@@ -26,6 +27,7 @@ public class GameSession {
      */
     public void reset() {
         initSession();
+        this.moveHistory.clear();
     }
 
     /**
@@ -60,5 +62,30 @@ public class GameSession {
      */
     public SelectionManager getSelection() {
         return selection;
+    }
+
+    /**
+     * Registra um lance convertido para a notação algébrica que o Stockfish entende.
+     */
+    public void recordMove(int fromRow, int fromCol, int toRow, int toCol) {
+        String from = convertToAlgebraic(fromRow, fromCol);
+        String to = convertToAlgebraic(toRow, toCol);
+        this.moveHistory.add(from + to); // Ex: adiciona "e2e4" ao histórico
+    }
+
+    /**
+     * Junta todo o histórico de lances em uma única linha de texto separada por espaços.
+     */
+    public String getHistoryAsString() {
+        return String.join(" ", this.moveHistory);
+    }
+
+    /**
+     * Converte as coordenadas da matriz JavaFX para o padrão internacional de xadrez.
+     */
+    private String convertToAlgebraic(int row, int col) {
+        char colunaText = (char) ('a' + col);
+        int linhaText = 8 - row;
+        return "" + colunaText + linhaText;
     }
 }

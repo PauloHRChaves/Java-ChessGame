@@ -46,9 +46,9 @@ echo 1. Se o caminho listado acima terminar em "\bin\java.exe":
 echo    Copie ele inteiro, mas APAGUE o final "\bin\java.exe".
 echo    Exemplo: C:\Users\Nome\.jdks\jdk-17 (Copie ate aqui)
 echo.
-echo 2. Se o caminho acima for o atalho "javapath":
+echo 2. Se o caminho acima for o atalho "javapath" ou outros:
 echo    Esse atalho nao serve. Abra o Explorador de Arquivos e 
-echo    copie o caminho real de onde instalou o JDK. Locais comuns, Ex:
+echo    copie o caminho real de onde instalou o JDK. Locais comuns, Exemplos:
 echo    - C:\Program Files\Java\jdk-17
 echo    - C:\Users\SeuUsuario\.jdks\
 echo.
@@ -57,7 +57,7 @@ echo ============================================================
 echo.
 
 :: Pede para a pessoa colar o caminho correto
-set /p CAMINHO_JDK="Cole o caminho completo aqui e aperte ENTER: "
+set /p CAMINHO_JDK="Cole o caminho completo aqui e dê ENTER: "
 
 if "%CAMINHO_JDK%"=="" (
     echo.
@@ -80,7 +80,7 @@ echo [PRONTO!] JAVA_HOME configurada com sucesso para:
 echo %CAMINHO_JDK%
 echo.
 echo ATENCAO: Feche todas as janelas do CMD/PowerShell e do seu 
-echo Editor de Codigo (VS Code, IntelliJ, Eclipse, etc.) para aplicar.
+echo Editor de Codigo (VS Code, IntelliJ, etc.) para aplicar.
 echo.
 echo Depois, abra o terminal na pasta do projeto e rode:
 echo No PowerShell: ./mvnw javafx:run

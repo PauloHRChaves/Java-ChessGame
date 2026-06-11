@@ -10,6 +10,8 @@ import com.pchess.model.game.state.CheckState;
 import com.pchess.model.game.state.CheckmateState;
 import com.pchess.model.observer.ObserverNotifier;
 import com.pchess.model.pieces.Piece;
+import com.pchess.model.pieces.PieceFactory;
+import com.pchess.model.pieces.concrete.Peao;
 import com.pchess.utils.SoundManager;
 
 /**
@@ -36,6 +38,10 @@ public class ClickHandler {
     public void handleClick(int row, int col) {
         Position clickedPos = new Position(row, col);
         SelectionManager selection = session.getSelection();
+
+        if (selection.isPromotionPending()) {
+            return; 
+        }
 
         // Máquina de estados baseada no SelectionManager
         if (!selection.hasSelection()) {
@@ -96,25 +102,65 @@ public class ClickHandler {
             board.movePiece(selectedPos, clickedPos);
             pieceToMove.setMoved(); // Altera a flag interna da peça (útil para regras como o roque e primeiro movimento do peão)
 
+            boolean ehPeao = pieceToMove.getType().equalsIgnoreCase("peao") || pieceToMove instanceof Peao;
+            boolean alcancouFim = (clickedPos.getRow() == 0 || clickedPos.getRow() == 7);
+
+            if (ehPeao && alcancouFim) {
+                selection.setPromotionPending(clickedPos);
+                selection.clearSelection();
+                return; 
+            }
+            
             // Passa o turno e atualiza o estado de validação de jogadas (Xeque, Xeque-Mate, etc.)
             referee.nextTurn(board);
 
-            // Orquestração de áudio baseada em captura ou movimento simples
-            if (referee.getCurrentState() instanceof CheckmateState) {
-                SoundManager.playCheckmateSound();
-            } else if (referee.getCurrentState() instanceof CheckState) {
-                SoundManager.playCheckSound();
-            } else if (targetPiece != null) {
-                SoundManager.playCaptureSound();
-            } else {
-                SoundManager.playMoveSound();
-            }
+            playMoveSoundEffect(targetPiece, referee);
             
             // Limpa o estado temporário para a próxima jogada
             selection.clearSelection();
         } else {
             // Regra de Troca Rápida: Se o movimento for inválido, tenta selecionar a nova peça clicada imediatamente
             handleFirstClick(clickedPos);
+        }
+    }
+    
+    /**
+     * Processa a escolha de promoção do peão, transformando-o na peça selecionada pelo jogador e avançando o turno.
+     */
+    public void handlePromotionSelection(String tipoEscolhido) {
+        SelectionManager selection = session.getSelection();
+        Board board = session.getBoard();
+        Referee referee = session.getReferee();
+
+        // Coleta dados do estado suspenso na memória
+        Position alvo = selection.getPromotionPos();
+        String corAtual = referee.getCurrentTurn();
+
+        // Transforma a peça usando o padrão Factory
+        Piece novaPeca = PieceFactory.createPiece(tipoEscolhido, corAtual);
+        board.setPiece(alvo, novaPeca);
+
+        // Modifica o estado do jogo e avança o turno
+        selection.clearPromotion();
+
+        referee.nextTurn(board);
+
+        playMoveSoundEffect(null, referee);
+
+        // Atualiza todos os observers sincronizadamente
+        notifier.notify(session);
+    }
+
+    // Método auxiliar para tocar efeitos sonoros contextuais após um movimento ser processado
+    private void playMoveSoundEffect(Piece targetPiece, Referee referee) {
+        if (referee.getCurrentState() instanceof CheckmateState) {
+            SoundManager.playCheckmateSound();
+        } else if (referee.getCurrentState() instanceof CheckState) {
+            SoundManager.playCheckSound();
+        } else if (targetPiece != null) {
+            SoundManager.playCaptureSound();
+        } else {
+            SoundManager.playMoveSound();
         }
     }
 }

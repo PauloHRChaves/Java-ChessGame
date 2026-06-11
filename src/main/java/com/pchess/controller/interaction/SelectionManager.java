@@ -12,6 +12,8 @@ import com.pchess.model.board.Position;
 public class SelectionManager {
     // Armazena a posição da peça atualmente selecionada (null se nenhuma estiver selecionada)
     private Position selectedPosition = null;
+
+    private Position promotionPos;
     
     // Lista contendo os caminhos e destinos válidos para a peça selecionada
     private List<Position> possibleMoves = new ArrayList<>();
@@ -55,5 +57,33 @@ public class SelectionManager {
      */
     public List<Position> getPossibleMoves() { 
         return possibleMoves;
+    }
+
+    /**
+     * Define a posição do peão que está aguardando promoção, indicando que o próximo clique deve ser tratado como escolha de peça para promoção.
+     */
+    public void setPromotionPending(Position pos) {
+        this.promotionPos = pos;
+    }
+
+    /**
+     * Verifica se há um peão aguardando promoção, o que indica que o próximo clique deve ser tratado como escolha de peça para promoção.
+     */
+    public boolean isPromotionPending() {
+        return promotionPos != null;
+    }
+
+    /**
+     * Retorna a posição do peão que está aguardando promoção, ou null se não houver promoção pendente.
+     */
+    public Position getPromotionPos() {
+        return promotionPos;
+    }
+
+    /**
+     * Limpa o estado de promoção pendente, indicando que a escolha de peça para promoção foi concluída ou cancelada.
+     */
+    public void clearPromotion() {
+        this.promotionPos = null;
     }
 }

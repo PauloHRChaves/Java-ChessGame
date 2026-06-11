@@ -8,9 +8,17 @@ import com.pchess.model.game.state.CheckmateState;
 import com.pchess.model.observer.GameObserver;
 import com.pchess.view.ChessBoardView;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 /**
  * Controlador principal da tela do jogo (game_layout.fxml).
@@ -23,12 +31,26 @@ public class GameViewController implements GameObserver {
     @FXML 
     private BorderPane mainLayout;
 
-    @FXML
-    private Label statusLabel;
+    @FXML private Label statusLabel;
+    @FXML private Label turnLabel;
 
     @FXML
-    private Label turnLabel;
+    private StackPane boardAnchor;
+
+    @FXML
+    private VBox promotionOverlay;
+
+    @FXML private ImageView queenPromoImage;
+    @FXML private ImageView rookPromoImage;
+    @FXML private ImageView bishopPromoImage;
+    @FXML private ImageView knightPromoImage;
+
+    @FXML
+    private StackPane rootContainer;
     
+    @FXML
+    private VBox pauseMenu;
+        
     /**
      * Ciclo de vida do JavaFX. Executado automaticamente após o carregamento do FXML.
      * Estabelece a ordem correta de conexões e injeções de dependência para evitar NullPointerExceptions.
@@ -38,12 +60,12 @@ public class GameViewController implements GameObserver {
         // Obtém as instâncias do microssistema de dados e regras
         GameManager match = GameManager.getInstance();
         GameSession session = match.getSession();
+        
 
         // Instancia a View injetando este controlador ('this') para mapear os cliques das casas
         this.boardView = new ChessBoardView(this);
 
-        // Acopla visualmente o tabuleiro no centro do layout principal
-        mainLayout.setCenter(boardView);
+        boardAnchor.getChildren().add(0, boardView);
 
         // Inscreve os observadores na lista de notificações do motor do jogo
         match.addObserver(boardView); // Notificações internas (redesenhar peças e destaques)
@@ -54,6 +76,21 @@ public class GameViewController implements GameObserver {
 
         // Atualiza o texto dos labels com base no estado do árbitro
         updateGameStatus(session.getReferee());
+
+        // Configura o listener global para a tecla ESC para abrir/fechar o menu de pausa
+        rootContainer.setFocusTraversable(true);
+
+        // O listener é adicionado ao nível da cena para garantir que funcione mesmo quando o foco estiver em outros elementos da interface
+        rootContainer.sceneProperty().addListener((observable, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+                    if (event.getCode() == KeyCode.ESCAPE) {
+                        togglePauseMenu();
+                        event.consume();
+                    }
+                });
+            }
+        });
     }
 
     /**
@@ -98,5 +135,63 @@ public class GameViewController implements GameObserver {
     @Override
     public void onBoardChanged(Board board, SelectionManager selection, Referee referee) {
         updateGameStatus(referee);
+
+        if (selection.isPromotionPending()) {
+            // Descobre a cor do jogador que está promovendo o peão
+            String cor = referee.getCurrentTurn();
+
+            // Carrega e define as imagens dinamicamente baseado na cor
+            // (Ajuste o caminho "images/" se seu projeto usar subpastas diferentes na build)
+            queenPromoImage.setImage(new Image(getClass().getResourceAsStream("/images/" + cor + "_rainha.png")));
+            rookPromoImage.setImage(new Image(getClass().getResourceAsStream("/images/" + cor + "_torre.png")));
+            bishopPromoImage.setImage(new Image(getClass().getResourceAsStream("/images/" + cor + "_bispo.png")));
+            knightPromoImage.setImage(new Image(getClass().getResourceAsStream("/images/" + cor + "_cavalo.png")));
+
+            // Lembra que salvamos as strings em minúsculo na lógica? Vamos embutir essa info nos botões
+            // para o handlePromotionChoice saber quem é quem mesmo sem texto visível:
+            ((Button) queenPromoImage.getParent()).setUserData("rainha");
+            ((Button) rookPromoImage.getParent()).setUserData("torre");
+            ((Button) bishopPromoImage.getParent()).setUserData("bispo");
+            ((Button) knightPromoImage.getParent()).setUserData("cavalo");
+
+            promotionOverlay.setVisible(true);
+        } else {
+            promotionOverlay.setVisible(false);
+        }
+    }
+
+    /**
+     * Manipulador do evento de clique nos botões de promoção
+     */
+    @FXML
+    private void handlePromotionChoice(ActionEvent event) {
+        Button btnClicado = (Button) event.getSource();
+        
+        String tipoEscolhido = (String) btnClicado.getUserData();
+
+        GameManager.getInstance().handlePromotionChoice(tipoEscolhido);
+    }
+
+    // Método utilitário para alternar a visibilidade do menu de pausa
+    private void togglePauseMenu() {
+        // Se a promoção de peão estiver ativa, talvez seja bom bloquear o pause, ou vice-versa.
+        // Inverte o estado de visibilidade do overlay do menu de pausa
+        boolean isVisible = pauseMenu.isVisible();
+        pauseMenu.setVisible(!isVisible);
+        
+        // Se o menu apareceu, joga o foco para ele para capturar interações
+        if (!isVisible) {
+            pauseMenu.requestFocus();
+        } else {
+            rootContainer.requestFocus();
+        }
+    }
+
+    // Método utilitário público para permitir que o Menu feche a si mesmo
+    public void hidePauseMenu() {
+        if (pauseMenu != null) {
+            pauseMenu.setVisible(false);
+            rootContainer.requestFocus();
+        }
     }
 }

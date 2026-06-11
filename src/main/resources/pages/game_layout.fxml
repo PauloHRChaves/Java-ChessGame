@@ -3,6 +3,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
 
 <StackPane fx:id="rootContainer" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" 
            fx:controller="com.pchess.controller.GameViewController"
@@ -40,6 +41,35 @@
 
                 <center>
                     <StackPane fx:id="boardAnchor" style="-fx-background-color: rgba(0,0,0,0.1);">
+                        <VBox fx:id="promotionOverlay" visible="false" alignment="CENTER" spacing="15" 
+                            style="-fx-background-color: rgba(0, 0, 0, 0.75); -fx-padding: 30;">
+                            
+                            <Label text="PROMOÇÃO DE PEÃO" style="-fx-text-fill: white; -fx-font-size: 60px; -fx-font-weight: bold; -fx-font-family: 'Arial';"/>
+                            <Label text="Escolha para qual peça promover:" style="-fx-text-fill: #bbb; -fx-font-size: 25px;"/>
+                            
+                            <HBox alignment="CENTER" spacing="20">
+                                <Button onAction="#handlePromotionChoice" style="-fx-background-color: #4d4d4d; -fx-padding: 10; -fx-cursor: hand; -fx-background-radius: 5;">
+                                    <graphic>
+                                        <ImageView fx:id="queenPromoImage" fitWidth="100" preserveRatio="true"/>
+                                    </graphic>
+                                </Button>
+                                <Button onAction="#handlePromotionChoice" style="-fx-background-color: #4d4d4d; -fx-padding: 10; -fx-cursor: hand; -fx-background-radius: 5;">
+                                    <graphic>
+                                        <ImageView fx:id="rookPromoImage" fitWidth="100" preserveRatio="true"/>
+                                    </graphic>
+                                </Button>
+                                <Button onAction="#handlePromotionChoice" style="-fx-background-color: #4d4d4d; -fx-padding: 10; -fx-cursor: hand; -fx-background-radius: 5;">
+                                    <graphic>
+                                        <ImageView fx:id="bishopPromoImage" fitWidth="100" preserveRatio="true"/>
+                                    </graphic>
+                                </Button>
+                                <Button onAction="#handlePromotionChoice" style="-fx-background-color: #4d4d4d; -fx-padding: 10; -fx-cursor: hand; -fx-background-radius: 5;">
+                                    <graphic>
+                                        <ImageView fx:id="knightPromoImage" fitWidth="100" preserveRatio="true"/>
+                                    </graphic>
+                                </Button>
+                            </HBox>
+                        </VBox>
                     </StackPane>
                 </center>
             </BorderPane>
@@ -53,10 +83,9 @@
                     <Label fx:id="statusLabel" text="" styleClass="game-status-label" />
                 </HBox>
                 <Region VBox.vgrow="ALWAYS"/>
-                <HBox alignment="BOTTOM_LEFT">
-                    <Button text="RESTART" onAction="#handleRestart"  styleClass="btn-restart"/>
-                </HBox>
             </VBox>
         </right>
     </BorderPane>
+
+    <fx:include fx:id="pauseMenu" source="pause_menu.fxml" />
 </StackPane>
