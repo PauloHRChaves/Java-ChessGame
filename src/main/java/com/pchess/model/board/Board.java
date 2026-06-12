@@ -102,6 +102,10 @@ public class Board {
         Piece piece = getPiece(from);
         setPiece(to, piece);
         setPiece(from, null);
+
+        if(piece != null) {
+            piece.setMoved();
+        }
     }
 
     // =========================================================================

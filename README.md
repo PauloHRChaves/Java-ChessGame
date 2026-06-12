@@ -69,6 +69,7 @@ Comportamental:
 - Observer: Permite que múltiplos objetos sejam notificados automaticamente quando o estado do jogo muda. (GameObserver)
 - Strategy: Define diferentes algoritmos de movimento para peças de forma independente e intercambiável. (MovementStrategy)
 - State: Altera o comportamento do jogo conforme seu estado interno (normal, xeque, xeque-mate).
+
 <br>
 
 Estrutural:

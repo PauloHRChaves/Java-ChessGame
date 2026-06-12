@@ -12,6 +12,7 @@ import com.pchess.model.observer.ObserverNotifier;
 import com.pchess.model.pieces.Piece;
 import com.pchess.model.pieces.PieceFactory;
 import com.pchess.model.pieces.concrete.Peao;
+import com.pchess.model.pieces.concrete.Rei;
 import com.pchess.utils.SoundManager;
 
 /**
@@ -98,9 +99,29 @@ public class ClickHandler {
         if (validMove) {
             Piece targetPiece = board.getPiece(clickedPos);
 
+            boolean isCastling = pieceToMove instanceof Rei && Math.abs(clickedPos.getCol() - selectedPos.getCol()) == 2;
+
+            if (isCastling) {
+
+                // ROQUE PEQUENO
+                if (clickedPos.getCol() == 6) {
+                    board.movePiece(
+                        new Position(selectedPos.getRow(), 7),
+                        new Position(selectedPos.getRow(), 5)
+                    );
+                }
+
+                // ROQUE GRANDE
+                else if (clickedPos.getCol() == 2) {
+                    board.movePiece(
+                        new Position(selectedPos.getRow(), 0),
+                        new Position(selectedPos.getRow(), 3)
+                    );
+                }
+            }
+
             // Executa a transposição física da peça na matriz do tabuleiro
             board.movePiece(selectedPos, clickedPos);
-            pieceToMove.setMoved(); // Altera a flag interna da peça (útil para regras como o roque e primeiro movimento do peão)
 
             boolean ehPeao = pieceToMove.getType().equalsIgnoreCase("peao") || pieceToMove instanceof Peao;
             boolean alcancouFim = (clickedPos.getRow() == 0 || clickedPos.getRow() == 7);

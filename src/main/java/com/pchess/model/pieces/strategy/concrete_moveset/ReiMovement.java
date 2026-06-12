@@ -6,6 +6,7 @@ import java.util.List;
 import com.pchess.model.board.Board;
 import com.pchess.model.board.Position;
 import com.pchess.model.pieces.Piece;
+import com.pchess.model.pieces.concrete.Torre;
 import com.pchess.model.pieces.strategy.MovementStrategy;
 
 public class ReiMovement implements MovementStrategy {
@@ -43,13 +44,69 @@ public class ReiMovement implements MovementStrategy {
             }
         }
 
-        // --- Lógica de Castling (Roque) ---
-        // Se você quiser começar a esboçar o Roque, seria algo assim:
-        // if (!piece.hasMoved() && !isInCheck(board, piece)) {
-        //    checkKingsideRoque(moves, currentPos, board, piece);
-        //    checkQueensideRoque(moves, currentPos, board, piece);
-        // }
+        if (!piece.hasMoved()) {
+            checkKingsideCastling(moves, currentPos, board);
+            checkQueensideCastling(moves, currentPos, board);
+        }
 
         return moves;
+    }
+
+    private void checkKingsideCastling(List<Position> moves, Position reiPos, Board board) {
+
+        int row = reiPos.getRow();
+
+        Position rookPos = new Position(row, 7);
+
+        Piece rook = board.getPiece(rookPos);
+
+        if (!(rook instanceof Torre)) {
+            return;
+        }
+
+        if (rook.hasMoved()) {
+            return;
+        }
+
+        if (board.getPiece(new Position(row, 5)) != null) {
+            return;
+        }
+
+        if (board.getPiece(new Position(row, 6)) != null) {
+            return;
+        }
+
+        moves.add(new Position(row, 6));
+    }
+    
+    private void checkQueensideCastling(List<Position> moves, Position reiPos, Board board) {
+
+        int row = reiPos.getRow();
+
+        Position rookPos = new Position(row, 0);
+
+        Piece rook = board.getPiece(rookPos);
+
+        if (!(rook instanceof Torre)) {
+            return;
+        }
+
+        if (rook.hasMoved()) {
+            return;
+        }
+
+        if (board.getPiece(new Position(row, 1)) != null) {
+            return;
+        }
+
+        if (board.getPiece(new Position(row, 2)) != null) {
+            return;
+        }
+
+        if (board.getPiece(new Position(row, 3)) != null) {
+            return;
+        }
+
+        moves.add(new Position(row, 2));
     }
 }
